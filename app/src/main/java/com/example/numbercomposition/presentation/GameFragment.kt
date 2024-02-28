@@ -34,15 +34,16 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvOption1.setOnClickListener{
+        binding.tvOption1.setOnClickListener {
             launchGameFinishedFragment(
                 GameResult(
-                true,0,0, GameSetting(
-                    0,0,0,0
+                    true, 0, 0, GameSetting(
+                        0, 0, 0, 0
+                    )
                 )
             )
-            )
         }
+
     }
 
     override fun onDestroyView() {
@@ -51,7 +52,10 @@ class GameFragment : Fragment() {
     }
 
     private fun parseArgs() {
-        level = requireArguments().getSerializable(KEY_LEVE) as Level
+        requireArguments().getParcelable<Level>(KEY_LEVE)?.let {
+            level = it
+        }
+
     }
 
     private fun launchGameFinishedFragment(gameResult: GameResult) {
@@ -67,7 +71,7 @@ class GameFragment : Fragment() {
         fun newInstance(level: Level): GameFragment {
             return GameFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_LEVE, level)
+                    putParcelable(KEY_LEVE, level)
                 }
             }
         }
