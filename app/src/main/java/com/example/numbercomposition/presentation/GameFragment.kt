@@ -9,19 +9,22 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.*
 import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.FragmentGameBinding
 import com.example.numbercomposition.domain.entity.GameResult
-import com.example.numbercomposition.domain.entity.GameSetting
 import com.example.numbercomposition.domain.entity.Level
-import java.lang.RuntimeException
 
 class GameFragment : Fragment() {
+    private val viewModelFactory by lazy {
+        GameViewModelFactory(
+            level,
+            requireActivity().application
+        )
+    }
     private val viewModel: GameViewModel by lazy {
         ViewModelProvider(
             this,
-            AndroidViewModelFactory.getInstance(requireActivity().application)
+            viewModelFactory
         )[GameViewModel::class.java]
     }
     private val tvOptions by lazy {
@@ -57,7 +60,6 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         setClickListenersToOptions()
-        viewModel.startGame(level)
     }
     private fun setClickListenersToOptions(){
         for (tvOptions in tvOptions){
