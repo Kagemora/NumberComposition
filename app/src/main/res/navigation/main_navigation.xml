@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/welcomeFragment3">
+    <fragment
+        android:id="@+id/welcomeFragment3"
+        android:name="com.example.numbercomposition.presentation.WelcomeFragment"
+        android:label="WelcomeFragment" >
+        <action
+            android:id="@+id/action_welcomeFragment3_to_chooseLevelFragment2"
+            app:destination="@id/chooseLevelFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseLevelFragment2"
+        android:name="com.example.numbercomposition.presentation.ChooseLevelFragment"
+        android:label="fragment_choose_level"
+        tools:layout="@layout/fragment_choose_level" >
+        <action
+            android:id="@+id/action_chooseLevelFragment2_to_gameFragment2"
+            app:destination="@id/gameFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment2"
+        android:name="com.example.numbercomposition.presentation.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment2_to_gameFinishedFragment2"
+            app:destination="@id/gameFinishedFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFinishedFragment2"
+        android:name="com.example.numbercomposition.presentation.GameFinishedFragment"
+        android:label="fragment_game_finished"
+        tools:layout="@layout/fragment_game_finished" />
+</navigation>
