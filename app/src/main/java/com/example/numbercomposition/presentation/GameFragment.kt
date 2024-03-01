@@ -10,24 +10,29 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.FragmentGameBinding
 import com.example.numbercomposition.domain.entity.GameResult
 import com.example.numbercomposition.domain.entity.Level
 
 class GameFragment : Fragment() {
+    private val args by navArgs<GameFragmentArgs>()
+
     private val viewModelFactory by lazy {
         GameViewModelFactory(
-            level,
+            args.level,
             requireActivity().application
         )
     }
+
     private val viewModel: GameViewModel by lazy {
         ViewModelProvider(
             this,
             viewModelFactory
         )[GameViewModel::class.java]
     }
+
     private val tvOptions by lazy {
         mutableListOf<TextView>().apply {
             add(binding.tvOption1)
@@ -38,15 +43,12 @@ class GameFragment : Fragment() {
             add(binding.tvOption6)
         }
     }
+
     private var _binding: FragmentGameBinding? = null
-    private lateinit var level: Level
+
     private val binding: FragmentGameBinding
         get() = _binding ?: throw RuntimeException("FragmentWelcomeBinding == null")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,9 +64,10 @@ class GameFragment : Fragment() {
         observeViewModel()
         setClickListenersToOptions()
     }
-    private fun setClickListenersToOptions(){
-        for (tvOptions in tvOptions){
-            tvOptions.setOnClickListener{
+
+    private fun setClickListenersToOptions() {
+        for (tvOptions in tvOptions) {
+            tvOptions.setOnClickListener {
                 viewModel.chooseAnswer(tvOptions.text.toString().toInt())
             }
         }
@@ -93,13 +96,13 @@ class GameFragment : Fragment() {
         viewModel.formattedTime.observe(viewLifecycleOwner) {
             binding.tvTimer.text = it
         }
-        viewModel.minPercent.observe(viewLifecycleOwner){
+        viewModel.minPercent.observe(viewLifecycleOwner) {
             binding.progressBar.secondaryProgress = it
         }
-        viewModel.gameResult.observe(viewLifecycleOwner){
+        viewModel.gameResult.observe(viewLifecycleOwner) {
             launchGameFinishedFragment(it)
         }
-        viewModel.progressAnswers.observe(viewLifecycleOwner){
+        viewModel.progressAnswers.observe(viewLifecycleOwner) {
             binding.tvAnswersProgress.text = it
         }
     }
@@ -119,29 +122,8 @@ class GameFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseArgs() {
-        requireArguments().getParcelable<Level>(KEY_LEVE)?.let {
-            level = it
-        }
-
-    }
 
     private fun launchGameFinishedFragment(gameResult: GameResult) {
-        val args = Bundle().apply {
-            putParcelable(GameFinishedFragment.KEY_GAME_RESULT, gameResult)
-        }
-        findNavController().navigate(R.id.action_gameFragment2_to_gameFinishedFragment2,args)
-    }
-
-    companion object {
-        const val KEY_LEVE = "level"
-        const val NAME = "GameFragment"
-        fun newInstance(level: Level): GameFragment {
-            return GameFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_LEVE, level)
-                }
-            }
-        }
+        findNavController().navigate(GameFragmentDirections.actionGameFragment2ToGameFinishedFragment2(gameResult))
     }
 }
